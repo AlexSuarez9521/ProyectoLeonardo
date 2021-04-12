@@ -23,7 +23,7 @@ const Producto = ({ producto, dias, dia_inicio, dia_final }) => {
             id_usuario: usuario.id_usuario,
             id_producto: producto.id_producto,
             cantidad,
-            precio: producto.precio * dias,
+            precio: (producto.precio * dias) * cantidad,
             fecha_inicio: dia_inicio,
             fecha_final: dia_final,
             fecha_renta: dateTime
