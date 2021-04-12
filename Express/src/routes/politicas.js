@@ -7,6 +7,12 @@ router.get('/', async (req, res) => {
     res.json({ politicas })
 });
 
+router.get('/:id', async (req, res) => {
+    const { id } = req.params
+    const politicas = await database.query("SELECT * FROM terminos_condiciones WHERE id_terminos_condiciones = ?", [id]);
+    res.json({ politicas })
+});
+
 // AGREGAR POLITICA
 router.post('/', async (req, res) => {
     const { descripcion } = req.body;

@@ -22,6 +22,16 @@ router.post('/', async (req, res) => {
     res.json({ msg: "producto agregado" });
 });
 
+// ACTUALIZAR STOCK DEL PRODUCTO
+router.put('/stock/:id', async (req, res) => {
+    const { id } = req.params
+    const { stock } = req.body;
+    const stock_actual = await database.query("SELECT stock FROM productos WHERE id_producto = ?", [id])
+    const datos = [parseInt(stock_actual[0].stock + parseInt(stock)), id];
+    await database.query("UPDATE productos SET stock = ? WHERE id_producto = ?", datos)
+    res.json({ msg: "agregado stock" });
+});
+
 // ELIMINAR PRODUCTO
 router.delete('/:id', async (req, res) => {
     const { id } = req.params;

@@ -7,6 +7,12 @@ router.get('/', async (req, res) => {
     res.json({ imagenes })
 });
 
+router.get('/:id', async (req, res) => {
+    const { id } = req.params
+    const imagenes = await database.query("SELECT * FROM galeria WHERE id_galeria = ?", [id]);
+    res.json({ imagenes })
+});
+
 // AGREGAR IMAGEN
 router.post('/', async (req, res) => {
     const { imagen } = req.body;

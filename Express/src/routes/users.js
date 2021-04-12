@@ -6,7 +6,11 @@ const database = require('../database');
 
 
 router.get('/', async (req, res) => {
-    const usuarios = await database.query("SELECT * FROM usuarios");
+    const usuarios = await database.query(`
+    SELECT u.id_usuario, u.nombre, u.cedula, u.telefono, u.contra, r.descripcion, u.id_rol
+    FROM usuarios u, roles r
+    WHERE u.id_rol = r.id_rol
+    `);
     res.json({ usuarios })
 });
 
@@ -48,5 +52,12 @@ router.put('/:id', async (req, res) => {
     await database.query("UPDATE usuarios SET nombre = ?, cedula = ?, telefono = ?, contra = ?, id_rol = ? WHERE id_usuario = ?", datos);
     res.json({ msg: "usuario modificado" });
 });
+
+router.post('/login', async (req, res) => {
+    const { nombre, contra } = req.body;
+    const datos = [nombre, contra]
+    const usuario = await database.query("SELECT * FROM usuarios WHERE nombre = ? AND contra = ?", datos)
+    res.json({ usuario })
+})
 
 module.exports = router;
