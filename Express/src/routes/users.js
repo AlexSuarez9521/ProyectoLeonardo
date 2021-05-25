@@ -1,63 +1,32 @@
 const router = require('express').Router();
-const database = require('../database');
+const usersController = require('../controllers/UsersController')
 
 // CONSULTAR TODOS LOS USUARIOS
 
 
 
-router.get('/', async (req, res) => {
-    const usuarios = await database.query(`
-    SELECT u.id_usuario, u.nombre, u.cedula, u.telefono, u.contra, r.descripcion, u.id_rol
-    FROM usuarios u, roles r
-    WHERE u.id_rol = r.id_rol
-    `);
-    res.json({ usuarios })
-});
+router.get('/', usersController.ListarUsuarios);
 
 // CONSULTAR UN USUARIO
 
 
-router.get('/:id', async (req, res) => {
-    const { id } = req.params;
-    const usuario = await database.query("SELECT * FROM usuarios WHERE id_usuario = ?", [id]);
-    res.json({ usuario })
-});
+router.get('/:id', usersController.ConsultarUsuario);
 
 // AGREGAR USUARIO
 
 
-router.post('/', async (req, res) => {
-    const { nombre, cedula, telefono, contra, id_rol } = req.body;
-    const datos = [nombre, cedula, telefono, contra, id_rol];
-    await database.query("INSERT INTO usuarios(nombre,cedula,telefono,contra,id_rol) VALUES(?,?,?,?,?)", datos);
-    res.json({ msg: "usuario agregado" });
-});
+router.post('/', usersController.AgregarUsuario);
 
 // ELIMINAR USUARIO
 
 
-router.delete('/:id', async (req, res) => {
-    const { id } = req.params;
-    await database.query("DELETE FROM usuarios WHERE id_usuario = ?", [id]);
-    res.json({ msg: "usuario eliminado" });
-});
+router.delete('/:id', usersController.EliminarUsuario);
 
 // MODIFICAR USUARIO
 
 
-router.put('/:id', async (req, res) => {
-    const { id } = req.params;
-    const { nombre, cedula, telefono, contra, id_rol } = req.body;
-    const datos = [nombre, cedula, telefono, contra, id_rol, id];
-    await database.query("UPDATE usuarios SET nombre = ?, cedula = ?, telefono = ?, contra = ?, id_rol = ? WHERE id_usuario = ?", datos);
-    res.json({ msg: "usuario modificado" });
-});
+router.put('/:id', usersController.ModificarUsuario);
 
-router.post('/login', async (req, res) => {
-    const { nombre, contra } = req.body;
-    const datos = [nombre, contra]
-    const usuario = await database.query("SELECT * FROM usuarios WHERE nombre = ? AND contra = ?", datos)
-    res.json({ usuario })
-})
+router.post('/login', usersController.Login)
 
 module.exports = router;

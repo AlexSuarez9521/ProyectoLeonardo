@@ -1,40 +1,18 @@
 const router = require('express').Router();
-const database = require('../database');
+const politicasController = require('../controllers/PoliticasController')
 
 // CONSULTAR TODOS LOS POLITICAS
-router.get('/', async (req, res) => {
-    const politicas = await database.query("SELECT * FROM terminos_condiciones");
-    res.json({ politicas })
-});
+router.get('/', politicasController.ListarPoliticas);
 
-router.get('/:id', async (req, res) => {
-    const { id } = req.params
-    const politicas = await database.query("SELECT * FROM terminos_condiciones WHERE id_terminos_condiciones = ?", [id]);
-    res.json({ politicas })
-});
+router.get('/:id', politicasController.ListarPolitica);
 
 // AGREGAR POLITICA
-router.post('/', async (req, res) => {
-    const { descripcion } = req.body;
-    const datos = [descripcion];
-    await database.query("INSERT INTO terminos_condiciones(descripcion) VALUES(?)", datos);
-    res.json({ msg: "politica agregado" });
-});
+router.post('/', politicasController.AgregarPolitica);
 
 // ELIMINAR POLITICA
-router.delete('/:id', async (req, res) => {
-    const { id } = req.params;
-    await database.query("DELETE FROM terminos_condiciones WHERE id_terminos_condiciones = ?", [id]);
-    res.json({ msg: "politica eliminado" });
-});
+router.delete('/:id', politicasController.EliminarPolitica);
 
 // MODIFICAR POLITICA
-router.put('/:id', async (req, res) => {
-    const { id } = req.params;
-    const { descripcion } = req.body;
-    const datos = [descripcion, id];
-    await database.query("UPDATE terminos_condiciones SET descripcion = ? WHERE id_terminos_condiciones = ?", datos);
-    res.json({ msg: "politica modificado" });
-});
+router.put('/:id', politicasController.ModificarPolitica);
 
 module.exports = router;
