@@ -2,7 +2,7 @@ import React, { useReducer } from 'react';
 import PedidosContext from './useContext';
 import PedidosReducer from './useReducer';
 import ClienteAxios from '../../config/axios'
-import { 
+import {
     LISTAR_CARTA_POR_CATEGORIA,
     CONSULTAR_COMIDA
 } from '../../types'
@@ -14,7 +14,7 @@ const PedidosState = (props) => {
         comida: []
     }
 
-    const [ state, dispatch ] = useReducer(PedidosReducer, initialState)
+    const [state, dispatch] = useReducer(PedidosReducer, initialState)
 
     const ListarCartaPorCategoria = async (id) => {
         try {
@@ -28,16 +28,11 @@ const PedidosState = (props) => {
         }
     }
 
-    const ConsultarComidaSeleccionada = async (id) => {
-        try {
-            const response = await ClienteAxios.get(`/pedidos/comida/${id}`)
-            dispatch({
-                type: CONSULTAR_COMIDA,
-                payload: response.data
-            })
-        } catch (error) {
-            console.log(response.error)
-        }
+    const ConsultarComidaSeleccionada = (id) => {
+        dispatch({
+            type: CONSULTAR_COMIDA,
+            payload: id
+        })
     }
 
     return (

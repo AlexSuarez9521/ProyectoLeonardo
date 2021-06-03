@@ -19,7 +19,7 @@ export default (state, action) => {
         case CONSULTAR_COMIDA:
             return {
                 ...state,
-                comida: action.payload
+                comida: state.carta.filter(item => item.id_carta === action.payload)
             }
     }
 

@@ -97,7 +97,7 @@ const Pedido = ({ navigation }) => {
             <ScrollView>
                 {
                     carta.length === 0 
-                    ?  <Text>No hay equisde</Text>
+                    ?  <Text>No hay disponibles</Text>
                     : 
                         carta.map(item => {
                             return (
