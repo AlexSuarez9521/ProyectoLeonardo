@@ -12,6 +12,7 @@ app.use(morgan('dev'));
 const PORT = process.env.PORT || 5000;
 
 app.use('/usuarios', require('./routes/users'))
+app.use('/pedidos', require('./routes/pedidos'))
 
 app.listen(PORT, () => {
     console.log("localhost:" + PORT);
