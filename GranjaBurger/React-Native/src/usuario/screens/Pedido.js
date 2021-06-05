@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { SafeAreaView, ScrollView, Text, Modal } from 'react-native'
+import { SafeAreaView, ScrollView, Text, Modal, TouchableOpacity } from 'react-native'
+import ModalStyles from '../../styles/ModalStyles'
 import Carta from '../../componentes/Carta'
 import ModalContent from '../../componentes/ModalContent'
+import ModalPedido from '../../componentes/ModalPedido'
 import DropDownPicker from 'react-native-dropdown-picker'
 import LabelItemDropdown from '../../componentes/LabelItemDropdown'
 import AndroidSafeArea from '../../styles/AndroidSafeArea'
@@ -16,9 +18,10 @@ import IconPerroCaliente from '../../img/item-2.png'
 const Pedido = ({ navigation }) => {
 
     const pedidosContext = useContext(PedidosContext)
-    const { carta, comida, ListarCartaPorCategoria, ConsultarComidaSeleccionada } = pedidosContext
+    const { carta, comida, pedido, ListarCartaPorCategoria, ConsultarComidaSeleccionada, ListarPedido } = pedidosContext
 
     const [modal, setModal] = useState(false)
+    const [modalPedido, setModalPedido] = useState(false)
     const [value, setValue] = useState(1)
 
     const AbrirModal = (id) => {
@@ -28,6 +31,14 @@ const Pedido = ({ navigation }) => {
 
     const CerrarModal = () => {
         setModal(false)
+    }
+
+    const AbrirModalPedido = () => {
+        setModalPedido(true)
+    }
+
+    const CerrarModalPedido = () => {
+        setModalPedido(false)
     }
 
     const mostrarModal = (
@@ -40,8 +51,19 @@ const Pedido = ({ navigation }) => {
         </Modal>
     )
 
+    const mostrarModalPedido = (
+        <Modal
+            transparent={true}
+            animationType="fade"
+            visible={modalPedido}
+        >
+            <ModalPedido onPress={CerrarModalPedido} pedido={pedido} />
+        </Modal>
+    )
+
     useEffect(() => {
         ListarCartaPorCategoria(value)
+        ListarPedido()
     }, [])
 
     DropDownPicker.setTheme("DARK")
@@ -96,14 +118,14 @@ const Pedido = ({ navigation }) => {
             />
             <ScrollView>
                 {
-                    carta.length === 0 
-                    ?  <Text>No hay disponibles</Text>
-                    : 
+                    carta.length === 0
+                        ? <Text>No hay disponibles</Text>
+                        :
                         carta.map(item => {
                             return (
                                 <Carta
                                     key={item.id_carta}
-                                    item={item} 
+                                    item={item}
                                     onPress={() => AbrirModal(item.id_carta)}
                                 />
                             )
@@ -111,6 +133,13 @@ const Pedido = ({ navigation }) => {
                 }
             </ScrollView>
             {mostrarModal}
+            {mostrarModalPedido}
+            <TouchableOpacity
+                onPress={AbrirModalPedido}
+                style={ModalStyles.btnAgregar}
+            >
+                <Text style={ModalStyles.textAgregar}>TU PEDIDO</Text>
+            </TouchableOpacity>
         </SafeAreaView>
     )
 }

@@ -1,6 +1,7 @@
 import { 
     LISTAR_CARTA_POR_CATEGORIA,
-    CONSULTAR_COMIDA
+    CONSULTAR_COMIDA,
+    LISTAR_PEDIDO
 } from '../../types';
 
 export default (state, action) => {
@@ -14,6 +15,12 @@ export default (state, action) => {
             return {
                 ...state,
                 carta: action.payload
+            }
+
+        case LISTAR_PEDIDO:
+            return {
+                ...state,
+                pedido: action.payload
             }
         
         case CONSULTAR_COMIDA:
